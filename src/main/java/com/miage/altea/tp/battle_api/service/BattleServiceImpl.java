@@ -31,4 +31,12 @@ public class BattleServiceImpl implements BattleService {
     public Battle attack(String uuid, String trainer, String attack) {
         return null;
     }
+
+    public int calculateDamages(int attack, int level, int defense) {
+        var res = (2 * level) / 5;
+        var diff = (2 * attack) / defense;
+
+        res += diff + 2;
+        return res;
+    }
 }
