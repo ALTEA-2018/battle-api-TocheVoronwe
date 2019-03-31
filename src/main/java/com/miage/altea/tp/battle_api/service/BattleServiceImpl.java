@@ -1,7 +1,6 @@
 package com.miage.altea.tp.battle_api.service;
 
 import com.miage.altea.tp.battle_api.bo.Battle;
-import com.miage.altea.tp.battle_api.bo.Trainer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
