@@ -4,7 +4,14 @@ import lombok.Data;
 
 @Data
 public class BattlePokemon {
+    int id;
     int hp;
-    int maxHP;
+    int maxHp;
+    int attack;
+    int defense;
+    int speed;
+    int level;
+    boolean ko;
+    boolean alive;
     PokemonType type;
 }

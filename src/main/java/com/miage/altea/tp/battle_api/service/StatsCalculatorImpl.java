@@ -1,17 +1,20 @@
 package com.miage.altea.tp.battle_api.service;
 
+import org.springframework.stereotype.Service;
+
+@Service()
 public class StatsCalculatorImpl implements StatsCalculator{
-    public int calculateHp(int base, int level) {
-        var res = level / 50;
+    public int calculateHp(float base, float level) {
+        float res = level / 50;
         res *= base;
-        res += 5;
-        return res;
+        res += 10 + level;
+        return Math.round(res);
     }
 
-    public int calculateStat(int base, int level) {
-        var res = level / 50;
+    public int calculateStat(float base, float level) {
+        float res = level / 50;
         res *= base;
-        res += level + 10;
-        return res;
+        res += 5;
+        return Math.round(res);
     }
 }

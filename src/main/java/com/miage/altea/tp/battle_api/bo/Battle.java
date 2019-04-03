@@ -7,6 +7,6 @@ import java.util.UUID;
 @Data
 public class Battle {
     UUID uuid;
-    Trainer trainer;
-    Trainer opponent;
+    BattleTrainer trainer;
+    BattleTrainer opponent;
 }

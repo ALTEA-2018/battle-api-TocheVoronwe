@@ -8,9 +8,4 @@ import lombok.Setter;
 public class TeamMember {
     int pokemonType;
     int level;
-    int maxHp;
-    int attack;
-    int defense;
-    int speed;
-    int hp;
 }
