@@ -14,7 +14,8 @@ public class BattleRepositoryImpl implements BattleRepository {
     }
 
     public Battle findBattle(String uuid) {
-        return battles.getOrDefault(uuid, null);
+        UUID rUuid = UUID.fromString(uuid);
+        return battles.getOrDefault(rUuid, null);
     }
 
     public Battle createBattle(Battle battle) {

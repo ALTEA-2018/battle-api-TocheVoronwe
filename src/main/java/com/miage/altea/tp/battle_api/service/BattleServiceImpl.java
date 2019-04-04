@@ -48,7 +48,7 @@ public class BattleServiceImpl implements BattleService {
     }
 
     public Battle getBattle(String uuid) {
-        return null;
+        return battleRepository.findBattle(uuid);
     }
 
     public Battle attack(String uuid, String trainer, String attack) {

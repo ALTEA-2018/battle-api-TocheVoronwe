@@ -17,4 +17,10 @@ public class BattleController {
                                @RequestParam("opponent") String opponentName) {
         return battleService.createBattle(trainerName, opponentName);
     }
+
+    @GetMapping("/{battleUuid}")
+    public Battle getBattle(@PathVariable("battleUuid") String uuid) {
+        System.out.println(uuid);
+        return battleService.getBattle(uuid);
+    }
 }
