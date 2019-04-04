@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class BattleController {
     @Autowired
     BattleService battleService;
+
     @PostMapping()
     public Battle createBattle(@RequestParam("trainer") String trainerName,
                                @RequestParam("opponent") String opponentName) {
@@ -20,7 +21,13 @@ public class BattleController {
 
     @GetMapping("/{battleUuid}")
     public Battle getBattle(@PathVariable("battleUuid") String uuid) {
-        System.out.println(uuid);
         return battleService.getBattle(uuid);
+    }
+
+
+    @PostMapping("/{battleUuid}/{{name}}/attack")
+    public Battle attack(@PathVariable("battleUuid") String uuid,
+                         @PathVariable("name") String name) {
+        return null;
     }
 }

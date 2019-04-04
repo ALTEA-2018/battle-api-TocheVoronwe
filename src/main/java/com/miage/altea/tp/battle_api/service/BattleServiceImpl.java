@@ -52,15 +52,35 @@ public class BattleServiceImpl implements BattleService {
     }
 
     public Battle attack(String uuid, String trainer, String attack) {
-        return null;
+
+        Battle battle = battleRepository.findBattle(uuid);
+
+        BattleTrainer battleTrainer = battle.getTrainer().getName().equals(trainer)
+                ? battle.getTrainer()
+                : battle.getOpponent();
+        if (!battleTrainer.getName().equals(trainer)
+                || !battleTrainer.isNextTurn())
+            return null;
+        BattleTrainer opponent = !battle.getTrainer().getName().equals(trainer)
+                ? battle.getTrainer()
+                : battle.getOpponent();
+
+        BattlePokemon trainerPokemon = getActivePokemon(battleTrainer.getTeam());
+        BattlePokemon opponentPokemon = getActivePokemon(opponent.getTeam());
+
+        return battleRepository.findBattle(uuid);
     }
 
-    public int calculateDamages(int attack, int level, int defense) {
+    public int calculateDamages(float attack, float level, float defense) {
         var res = (2 * level) / 5;
         var diff = (2 * attack) / defense;
 
         res += diff + 2;
-        return res;
+        return Math.round(res);
+    }
+
+    private BattlePokemon getActivePokemon(List<BattlePokemon>  battlePokemons) {
+        return battlePokemons.stream().filter(p -> p.isAlive()).findFirst().orElse(null);
     }
 
     private PokemonType getPokemonType(int id) {
