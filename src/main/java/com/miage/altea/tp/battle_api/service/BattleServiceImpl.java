@@ -68,10 +68,27 @@ public class BattleServiceImpl implements BattleService {
         BattlePokemon trainerPokemon = getActivePokemon(battleTrainer.getTeam());
         BattlePokemon opponentPokemon = getActivePokemon(opponent.getTeam());
 
+        int hp = opponentPokemon.getHp();
+        int damages = calculateDamages(trainerPokemon.getAttack(), trainerPokemon.getLevel(), trainerPokemon.getDefense());
+        hp -= damages;
+        opponentPokemon.setHp(hp < 0 ? 0 : null);
+        opponentPokemon.setAlive(hp < 0);
+        battleTrainer.setNextTurn(false);
+        opponent.setNextTurn(true);
+        opponent.updatePokemon(opponentPokemon);
+        if (battle.getTrainer().getName().equals(trainer)) {
+            battle.setTrainer(battleTrainer);
+            battle.setOpponent(opponent);
+        } else {
+            battle.setOpponent(battleTrainer);
+            battle.setTrainer(opponent);
+        }
+
+        battleRepository.updateBattle(battle);
         return battleRepository.findBattle(uuid);
     }
 
-    public int calculateDamages(float attack, float level, float defense) {
+    private int calculateDamages(float attack, float level, float defense) {
         var res = (2 * level) / 5;
         var diff = (2 * attack) / defense;
 
@@ -79,24 +96,12 @@ public class BattleServiceImpl implements BattleService {
         return Math.round(res);
     }
 
-    private BattlePokemon getActivePokemon(List<BattlePokemon>  battlePokemons) {
+    private BattlePokemon getActivePokemon(List<BattlePokemon> battlePokemons) {
         return battlePokemons.stream().filter(p -> p.isAlive()).findFirst().orElse(null);
-    }
-
-    private PokemonType getPokemonType(int id) {
-        return pokemonTypeService.getPokemonById(id);
-    }
-
-    private BattlePokemon getBattlePokemon(PokemonType pokemonType) {
-        BattlePokemon battlePokemon = new BattlePokemon();
-
-        battlePokemon.setType(pokemonType);
-        return battlePokemon;
     }
 
     private BattleTrainer setBattleTrainer(Trainer trainer) {
         BattleTrainer battleTrainer = new BattleTrainer();
-        List<BattlePokemon> team = new ArrayList<>();
         battleTrainer.setName(trainer.getName());
         battleTrainer.setTeam(setTeamStat(trainer.getTeam()));
         return battleTrainer;
