@@ -36,7 +36,7 @@ public class BattleServiceImpl implements BattleService {
         if (trainerStart(battleTrainer, battleOpponent))
             battleTrainer.setNextTurn(true);
         else
-            battleOpponent.setNextTurn(false);
+            battleOpponent.setNextTurn(true);
         battle.setTrainer(battleTrainer);
         battle.setOpponent(battleOpponent);
         battle.setUuid(uuid);
@@ -51,9 +51,11 @@ public class BattleServiceImpl implements BattleService {
         return battleRepository.findBattle(uuid);
     }
 
-    public Battle attack(String uuid, String trainer, String attack) {
+    public Battle attack(String uuid, String trainer) {
 
         Battle battle = battleRepository.findBattle(uuid);
+        if (battle == null)
+            return null;
 
         BattleTrainer battleTrainer = battle.getTrainer().getName().equals(trainer)
                 ? battle.getTrainer()
@@ -71,7 +73,7 @@ public class BattleServiceImpl implements BattleService {
         int hp = opponentPokemon.getHp();
         int damages = calculateDamages(trainerPokemon.getAttack(), trainerPokemon.getLevel(), trainerPokemon.getDefense());
         hp -= damages;
-        opponentPokemon.setHp(hp < 0 ? 0 : null);
+        opponentPokemon.setHp(hp < 0 ? 0 : hp);
         opponentPokemon.setAlive(hp < 0);
         battleTrainer.setNextTurn(false);
         opponent.setNextTurn(true);
@@ -93,7 +95,7 @@ public class BattleServiceImpl implements BattleService {
         var diff = (2 * attack) / defense;
 
         res += diff + 2;
-        return Math.round(res);
+        return statsCalculator.round(res);
     }
 
     private BattlePokemon getActivePokemon(List<BattlePokemon> battlePokemons) {
@@ -115,7 +117,7 @@ public class BattleServiceImpl implements BattleService {
 
     private List<BattlePokemon> setTeamStat(List<TeamMember> teamMembers) {
         List<BattlePokemon> battlePokemons = new ArrayList<>();
-        teamMembers.parallelStream().forEach(m -> {
+        teamMembers.stream().forEach(m -> {
             BattlePokemon battlePokemon = new BattlePokemon();
             var pokemon = this.pokemonTypeService.getPokemonById(m.getPokemonType());
             var level = m.getLevel();

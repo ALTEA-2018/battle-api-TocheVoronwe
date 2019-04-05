@@ -8,5 +8,5 @@ public interface BattleService {
     public Battle createBattle(String trainer, String opponent);
     public List<Battle> getBattles();
     public Battle getBattle(String uuid);
-    public Battle attack(String uuid, String trainer, String attack);
+    public Battle attack(String uuid, String trainer);
 }
