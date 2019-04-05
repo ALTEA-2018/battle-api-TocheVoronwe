@@ -74,7 +74,7 @@ public class BattleServiceImpl implements BattleService {
         int damages = calculateDamages(trainerPokemon.getAttack(), trainerPokemon.getLevel(), trainerPokemon.getDefense());
         hp -= damages;
         opponentPokemon.setHp(hp < 0 ? 0 : hp);
-        opponentPokemon.setAlive(hp < 0);
+        opponentPokemon.setAlive(hp > 0);
         battleTrainer.setNextTurn(false);
         opponent.setNextTurn(true);
         opponent.updatePokemon(opponentPokemon);
